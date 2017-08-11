@@ -1,0 +1,72 @@
+#!/bin/bash
+
+FILE_NAME="output.avi"
+VIDEO_TITLE="0x000C - Blender Video Editing on Linux"
+VIDEO_DESCRIPTION="I didn't have a lot of time this week to make a video so I thought I would cover how I make videos on an open source Linux based stack. Blender as a VSE is more than capable for the types of videos I create so I have come to enjoy working with it. The ability to render and upload from my server really helps as well!
+
+Here is a github repo with all the files for this video!
+https://github.com/AkBKukU/BlenderVSEFiles
+
+It includes the editing windows I use and the upload script. It's not much more than you would have to figure out on your own but it will at least give you a full example if you are really wanting to do video editing with Blender.
+
+The multithreaded Blender script: https://github.com/sciactive/pulverize
+The youtube CLI upload script: https://github.com/TheMengzor/youtube-upload"
+VIDEO_TAGS="0x000C,Video Editing,Blender,Linux, AkBKukU "
+VIDEO_THUMBNAIL="../../assets - editing/images/Thumbnail.jpg"
+
+# getYesNo
+# Asks the user the given question and returns a 1 for yes and a 0 for no
+function getYesNo ()
+{	
+	output=2
+	message=$1
+	valid=false
+	until [ $valid == true ]
+	do
+	
+	echo -n "$message (y/n): "
+	read choice
+	choice=$(echo "${choice^^}" )
+		case $choice in
+			"Y"|"YES")
+				output=1
+				valid=true
+				;;
+
+			"N"|"NO")
+				output=0
+				valid=true
+				;;
+		esac
+	done
+
+	return $output
+}
+echo "Uploading $FILE_NAME"
+echo
+echo " --- $VIDEO_TITLE ---"
+echo
+echo "$VIDEO_DESCRIPTION"
+echo 
+
+# Example
+getYesNo "Continue?"
+answer=$?
+if [ "$answer" == 1 ]
+then
+	echo Starting...
+
+	else
+
+	exit 0
+fi
+
+
+youtube-upload \
+	--title="$VIDEO_TITLE" \
+	--description="$VIDEO_DESCRIPTION" \
+	--tags="$VIDEO_TAGS" \
+	--thumbnail="$VIDEO_THUMBNAIL" \
+	--privacy="unlisted" \
+	"$FILE_NAME"
+
